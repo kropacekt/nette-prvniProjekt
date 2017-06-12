@@ -1,0 +1,18 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+	<h1 n:block="title">Projekty</h1>
+
+    {foreach $projekty as $projekt}
+		<div class="projekt">
+			<h2>#{$projekt->id} {$projekt->nazev}</h2>
+			<div class="date">Datum odevzdání: {$projekt->datum_odevzdani|date:'%d.%m.%Y'}</div>
+			<div>Typ projektu: {$projekt->typ}</div>
+
+			<div>
+				{$projekt->webovy_projekt === 'ano' ? 'webový projekt'}
+			</div>
+		</div>
+    {/foreach}
+
+{/block}
