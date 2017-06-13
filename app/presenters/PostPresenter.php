@@ -20,9 +20,10 @@ class PostPresenter extends UI\Presenter
         $this->database = $database;
     }
 
-    protected function createComponentVytvoritProjektForm()
+    protected function createComponentProjektForm()
     {
         $form = new UI\Form;
+
         $form->addText('nazev', 'Název projektu:')
             ->setAttribute('class', 'form-control')
             ->setRequired("Název projektu je povinný!");
@@ -40,24 +41,64 @@ class PostPresenter extends UI\Presenter
         $form->addSubmit('odeslat')
             ->setAttribute('class', 'btn btn-default');
 
-        $form->onSuccess[] = [$this, 'vytvoritProjektFormSucceeded'];
+        $form->onSuccess[] = [$this, 'projektFormSucceeded'];
 
         return $form;
     }
 
-    public function vytvoritProjektFormSucceeded($form, $values)
+    public function projektFormSucceeded($form, $values)
     {
+        $id = $this->getParameter('id');
+
         $do = ($values->typ == 0 ? 'časově omezený' : 'continuous integration');
         $wp = ($values->webovy_projekt == 0 ? 'ne' : 'ano');
 
-        $this->database->table('projekt')->insert([
-            'nazev' => $values->nazev,
-            'datum_odevzdani' => $values->datum_odevzdani,
-            'typ' => $do,
-            'webovy_projekt' => $wp
-        ]);
+        if($id) {
+            $projekt = $this->database->table('projekt')->get($id);
+            $projekt->update([
+                'nazev' => $values->nazev,
+                'datum_odevzdani' => $values->datum_odevzdani,
+                'typ' => $do,
+                'webovy_projekt' => $wp
+            ]);
+            $this->flashMessage("Projekt byl úspěšně upraven.", 'success');
 
-        $this->flashMessage("Projekt byl úspěšně uložen do databáze", 'success');
+        } else {
+
+            $this->database->table('projekt')->insert([
+                'nazev' => $values->nazev,
+                'datum_odevzdani' => $values->datum_odevzdani,
+                'typ' => $do,
+                'webovy_projekt' => $wp
+            ]);
+
+            $this->flashMessage("Projekt byl úspěšně uložen do databáze", 'success');
+        }
+
         $this->redirect('this');
     }
+
+    public function actionProjekt($id)
+    {
+        if($id) {
+            $projekt = $this->database->table('projekt')->get($id);
+
+            if (!$projekt) {
+                $this->error('Projekt nebyl nalezen.');
+            }
+
+            $uprava = $projekt->toArray();
+            //dump($uprava);
+
+            $uprava['typ'] === "časově omezený" ? $uprava['typ'] = 0 : $uprava['typ'] = 1;
+            $uprava['webovy_projekt'] === "ano" ? $uprava['webovy_projekt'] = 1 : $uprava['webovy_projekt'] = 0;
+            $uprava['datum_odevzdani'] = $uprava['datum_odevzdani']->format('Y-m-d');
+
+            //dump($uprava);
+            $this->template->id = $id;
+            $this['projektForm']->setDefaults($uprava);
+        }
+
+    }
+
 }

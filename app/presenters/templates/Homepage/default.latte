@@ -5,7 +5,7 @@
 
     {foreach $projekty as $projekt}
 		<div class="projekt">
-			<h2>#{$projekt->id} {$projekt->nazev}</h2>
+			<a n:href="Post:projekt $projekt->id"><h2>#{$projekt->id} {$projekt->nazev}</h2></a>
 			<div class="date">Datum odevzdání: {$projekt->datum_odevzdani|date:'%d.%m.%Y'}</div>
 			<div>Typ projektu: {$projekt->typ}</div>
 
