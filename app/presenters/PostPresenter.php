@@ -54,6 +54,7 @@ class PostPresenter extends UI\Presenter
         $wp = ($values->webovy_projekt == 0 ? 'ne' : 'ano');
 
         if($id) {
+            /* UPRAVA */
             $projekt = $this->database->table('projekt')->get($id);
             $projekt->update([
                 'nazev' => $values->nazev,
@@ -61,10 +62,10 @@ class PostPresenter extends UI\Presenter
                 'typ' => $do,
                 'webovy_projekt' => $wp
             ]);
-            $this->flashMessage("Projekt byl úspěšně upraven.", 'success');
+            $this->flashMessage("Projekt byl úspěšně upraven.");
 
         } else {
-
+            /* VKLADANI */
             $this->database->table('projekt')->insert([
                 'nazev' => $values->nazev,
                 'datum_odevzdani' => $values->datum_odevzdani,
@@ -72,12 +73,14 @@ class PostPresenter extends UI\Presenter
                 'webovy_projekt' => $wp
             ]);
 
-            $this->flashMessage("Projekt byl úspěšně uložen do databáze", 'success');
+            $this->flashMessage("Projekt byl úspěšně uložen do databáze.", 'success');
+            //$this->redirect("Homepage:");
         }
 
         $this->redirect('this');
     }
 
+    /* editace */
     public function actionProjekt($id)
     {
         if($id) {
@@ -97,6 +100,17 @@ class PostPresenter extends UI\Presenter
             //dump($uprava);
             $this->template->id = $id;
             $this['projektForm']->setDefaults($uprava);
+        }
+
+    }
+
+    public function actionSmazat($id) {
+        try {
+            $this->database->query("DELETE FROM projekt WHERE id=?", $id);
+            $this->redirect("Homepage:");
+
+        }  catch(Exception $e) {
+            $this->flashMessage('Chyba při mazání projektu!', 'danger');
         }
 
     }

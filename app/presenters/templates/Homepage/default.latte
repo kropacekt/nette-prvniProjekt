@@ -2,17 +2,32 @@
 
 {block content}
 	<h1 n:block="title">Projekty</h1>
+	<div class="container">
+		<table class="table">
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Název projektu</th>
+				<th>Datum odevzdání</th>
+				<th>Typ projektu</th>
+				<th>Webový projekt</th>
+			</tr>
+			</thead>
+			<tbody>
 
-    {foreach $projekty as $projekt}
-		<div class="projekt">
-			<a n:href="Post:projekt $projekt->id"><h2>#{$projekt->id} {$projekt->nazev}</h2></a>
-			<div class="date">Datum odevzdání: {$projekt->datum_odevzdani|date:'%d.%m.%Y'}</div>
-			<div>Typ projektu: {$projekt->typ}</div>
+		{foreach $projekty as $projekt}
+			<tr>
+				<td>{$projekt->id}</td>
+				<td>{$projekt->nazev}</td>
+				<td>{$projekt->datum_odevzdani|date:'%d.%m.%Y'}</td>
+				<td>{$projekt->typ}</td>
+				<td>{$projekt->webovy_projekt}</td>
+				<td><a n:href="Post:projekt $projekt->id" class="btn btn-default">Editovat</a></td>
+				<td><a n:href="Post:smazat $projekt->id" class="btn btn-default">Smazat</a></td>
+			</tr>
+		{/foreach}
 
-			<div>
-				{$projekt->webovy_projekt === 'ano' ? 'webový projekt'}
-			</div>
-		</div>
-    {/foreach}
-
+			</tbody>
+		</table>
+	</div>
 {/block}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: 127.0.0.1
--- Vytvořeno: Pon 12. čen 2017, 10:59
+-- Vytvořeno: Stř 14. čen 2017, 12:08
 -- Verze serveru: 10.1.21-MariaDB
 -- Verze PHP: 7.1.1
 
@@ -31,18 +31,22 @@ CREATE TABLE IF NOT EXISTS `projekt` (
   `nazev` varchar(50) COLLATE utf8_czech_ci NOT NULL,
   `datum_odevzdani` date NOT NULL,
   `typ` set('časově omezený','continuous integration') COLLATE utf8_czech_ci NOT NULL,
-  `webovy_projekt` set('ano','ne') COLLATE utf8_czech_ci NOT NULL,
+  `webovy_projekt` set('ne','ano') COLLATE utf8_czech_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nazev` (`nazev`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 --
 -- Vypisuji data pro tabulku `projekt`
 --
 
 INSERT INTO `projekt` (`id`, `nazev`, `datum_odevzdani`, `typ`, `webovy_projekt`) VALUES
-(1, 'Kropiho projektík', '2017-06-16', 'časově omezený', 'ano'),
-(2, 'Hell project', '2017-06-30', 'continuous integration', 'ne');
+(1, 'Kropiho projekt', '2017-06-16', 'časově omezený', 'ano'),
+(2, 'Hello project', '2017-06-30', 'časově omezený', 'ne'),
+(3, 'Zkouška formu', '2017-02-08', 'časově omezený', 'ano'),
+(13, 'Contin Web', '2017-05-31', 'continuous integration', 'ano'),
+(14, 'Omezenec newebový', '2017-06-11', 'časově omezený', 'ne'),
+(16, 'Šestnáctý', '2018-02-11', 'časově omezený', 'ano');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
