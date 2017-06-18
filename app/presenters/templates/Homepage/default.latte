@@ -21,7 +21,13 @@
 				<td>{$projekt->nazev}</td>
 				<td>{$projekt->datum_odevzdani|date:'%d.%m.%Y'}</td>
 				<td>{$projekt->typ}</td>
-				<td>{$projekt->webovy_projekt}</td>
+				<td>
+					{if $projekt->webovy_projekt}
+						ano
+					{else}
+						ne
+					{/if}
+				</td>
 				<td><a n:href="Post:projekt $projekt->id" class="btn btn-default">Editovat</a></td>
 				<td><a n:href="Post:smazat $projekt->id" class="btn btn-default">Smazat</a></td>
 			</tr>

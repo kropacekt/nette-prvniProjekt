@@ -33,7 +33,7 @@ class PostPresenter extends UI\Presenter
             ->setType('date')
             ->setRequired("Datum odevzdání projektu je povinný!");
 
-        $form->addSelect('typ', 'Typ projektu:', ['časově omezený', 'continuous integration'])
+        $form->addSelect('typ', 'Typ projektu:', ['časově omezený' => 'časově omezený', 'continuous integration' => 'continuous integration'])
             ->setAttribute('class', 'form-control');
 
         $form->addCheckbox('webovy_projekt', ' webový projekt');
@@ -50,31 +50,22 @@ class PostPresenter extends UI\Presenter
     {
         $id = $this->getParameter('id');
 
-        $do = ($values->typ == 0 ? 'časově omezený' : 'continuous integration');
-        $wp = ($values->webovy_projekt == 0 ? 'ne' : 'ano');
-
         if($id) {
             /* UPRAVA */
-            $projekt = $this->database->table('projekt')->get($id);
-            $projekt->update([
-                'nazev' => $values->nazev,
-                'datum_odevzdani' => $values->datum_odevzdani,
-                'typ' => $do,
-                'webovy_projekt' => $wp
-            ]);
+            $this->database
+                ->table('projekt')
+                ->where("id=?", $id)
+                ->update($values);
+
             $this->flashMessage("Projekt byl úspěšně upraven.");
 
         } else {
             /* VKLADANI */
-            $this->database->table('projekt')->insert([
-                'nazev' => $values->nazev,
-                'datum_odevzdani' => $values->datum_odevzdani,
-                'typ' => $do,
-                'webovy_projekt' => $wp
-            ]);
+            $this->database
+                ->table('projekt')
+                ->insert($values);
 
             $this->flashMessage("Projekt byl úspěšně uložen do databáze.", 'success');
-            //$this->redirect("Homepage:");
         }
 
         $this->redirect('this');
@@ -84,7 +75,9 @@ class PostPresenter extends UI\Presenter
     public function actionProjekt($id)
     {
         if($id) {
-            $projekt = $this->database->table('projekt')->get($id);
+            $projekt = $this->database
+                ->table('projekt')
+                ->get($id);
 
             if (!$projekt) {
                 $this->error('Projekt nebyl nalezen.');
@@ -92,9 +85,6 @@ class PostPresenter extends UI\Presenter
 
             $uprava = $projekt->toArray();
             //dump($uprava);
-
-            $uprava['typ'] === "časově omezený" ? $uprava['typ'] = 0 : $uprava['typ'] = 1;
-            $uprava['webovy_projekt'] === "ano" ? $uprava['webovy_projekt'] = 1 : $uprava['webovy_projekt'] = 0;
             $uprava['datum_odevzdani'] = $uprava['datum_odevzdani']->format('Y-m-d');
 
             //dump($uprava);
@@ -104,12 +94,17 @@ class PostPresenter extends UI\Presenter
 
     }
 
-    public function actionSmazat($id) {
+    public function actionSmazat($id)
+    {
         try {
-            $this->database->query("DELETE FROM projekt WHERE id=?", $id);
-            $this->redirect("Homepage:");
+            $this->database
+                ->table('projekt')
+                ->where('id=?', $id)
+                ->delete();
 
-        }  catch(Exception $e) {
+            $this->redirect("this");
+
+        }  catch(\Exception $e) {
             $this->flashMessage('Chyba při mazání projektu!', 'danger');
         }
 
