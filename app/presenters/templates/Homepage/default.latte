@@ -28,8 +28,9 @@
 						ne
 					{/if}
 				</td>
-				<td><a n:href="Post:projekt $projekt->id" class="btn btn-default">Editovat</a></td>
-				<td><a n:href="Post:smazat $projekt->id" class="btn btn-default">Smazat</a></td>
+
+				<td><a n:href="Projekt:editovat $projekt->id" class="btn btn-default">Editovat</a></td>
+				<td><a n:href="Projekt:smazat $projekt->id" class="btn btn-default">Smazat</a></td>
 			</tr>
 		{/foreach}
 

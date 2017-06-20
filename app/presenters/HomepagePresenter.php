@@ -2,21 +2,24 @@
 
 namespace App\Presenters;
 
+use App\Model\ProjektManager;
 use Nette;
 
 
 class HomepagePresenter extends Nette\Application\UI\Presenter
 {
-    private $database;
+    /** @var ProjektManager */
+    private $projektManager;
 
-    public function __construct(Nette\Database\Context $database)
+    public function __construct(ProjektManager $projektManager)
     {
-        $this->database = $database;
+        $this->projektManager = $projektManager;
     }
 
     public function renderDefault()
     {
-        $this->template->projekty = $this->database->table('projekt');
+        $this->template->projekty = $this->projektManager->getAllProjekt();
+
     }
 
 }
