@@ -13,5 +13,7 @@ session:
 
 services:
     - App\Model\ProjektManager
+    - App\Model\UzivatelManager
+    - App\Model\ProjekUzivatelManager
     - App\IProjektControlFactory
     router: App\RouterFactory::createRouter

@@ -40,8 +40,15 @@ class ProjektPresenter extends UI\Presenter
 
     public function actionSmazat($id)
     {
-        $this->projektManager->smazatProjekt($id);
+        try {
+            $this->projektManager->smazatProjekt($id);
+            $this->flashMessage('Projekt byl úspěšně smazán.', 'info');
+        } catch(\Exception $e) {
+            $this->flashMessage('Projekt, který byl zadán ke smazání, neexistuje nebo jsou k němu připojeni pracovníci.', 'danger');
+        }
+
         $this->redirect("Homepage:");
+
     }
 
 }

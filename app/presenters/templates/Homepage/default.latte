@@ -1,6 +1,5 @@
-{* This is the welcome page, you can delete it *}
-
 {block content}
+
 	<h1 n:block="title">Projekty</h1>
 	<div class="container">
 		<table class="table">
@@ -11,6 +10,7 @@
 				<th>Datum odevzdání</th>
 				<th>Typ projektu</th>
 				<th>Webový projekt</th>
+				<th>Pracovníci</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -29,6 +29,15 @@
 					{/if}
 				</td>
 
+				<td>
+					{foreach $uzivatele as $uzivatel}
+						{if $uzivatel->id_projektu == $projekt->id}
+							{*{$uzivatel->jmeno}*}
+							{$uzivatel->prijmeni}<br>
+						{/if}
+					{/foreach}
+				</td>
+
 				<td><a n:href="Projekt:editovat $projekt->id" class="btn btn-default">Editovat</a></td>
 				<td><a n:href="Projekt:smazat $projekt->id" class="btn btn-default">Smazat</a></td>
 			</tr>
@@ -37,4 +46,13 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div class="container">
+        {foreach $flashes as $flash}
+			<div class="flash alert alert-{$flash->type} col-sm-8 col-sm-offset-2" style="text-align: center;">
+                {$flash->message}
+			</div>
+        {/foreach}
+	</div>
+
 {/block}

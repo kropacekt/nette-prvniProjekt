@@ -13,6 +13,7 @@ use Nette;
 
 class ProjektManager
 {
+
     private $database;
 
     public function __construct(Nette\Database\Context $database)
@@ -22,20 +23,27 @@ class ProjektManager
 
     public function getProjekt($id)
     {
-        $projekt = $this->database
+        $p = $this->database
             ->table('projekt')
             ->get($id);
 
-        $uprava = $projekt->toArray();
-        $uprava['datum_odevzdani'] = $uprava['datum_odevzdani']->format('Y-m-d');
+        $projekt = $p->toArray();
+        $projekt['datum_odevzdani'] = $projekt['datum_odevzdani']->format('Y-m-d');
 
-        return $uprava;
+        return $projekt;
     }
 
-    public function getAllProjekt()
+    public function getProjektAll()
     {
         return $this->database
             ->table('projekt');
+    }
+
+    public function getIdProjektLast()
+    {
+        return $this->database
+            ->table("projekt")
+            ->max("id");
     }
 
     public function pridatProjekt($values)
@@ -55,15 +63,9 @@ class ProjektManager
 
     public function smazatProjekt($id)
     {
-        try {
-            $this->database
-                ->table('projekt')
-                ->where('id=?', $id)
-                ->delete();
-
-        }  catch(\Exception $e) {
-            $this->flashMessage('Chyba při mazání projektu!', 'danger');
-        }
-
+        $this->database
+            ->table('projekt')
+            ->where('id=?', $id)
+            ->delete();
     }
 }
