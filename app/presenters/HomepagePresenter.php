@@ -1,30 +1,19 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Tomáš Kropáček
+ * Date: 26.06.2017
+ * Time: 11:01
+ */
 
 namespace App\Presenters;
 
-use App\Model\ProjektManager;
-use App\Model\ProjekUzivatelManager;
-use Nette;
+use Nette\Application\UI;
 
-
-class HomepagePresenter extends Nette\Application\UI\Presenter
+class HomepagePresenter extends UI\Presenter
 {
-    /** @var ProjektManager */
-    private $projektManager;
-
-    /** @var ProjektManager */
-    private $projekUzivatelManager;
-
-    public function __construct(ProjektManager $projektManager, ProjekUzivatelManager $projekUzivatelManager)
+    public function actionDefault()
     {
-        $this->projektManager = $projektManager;
-        $this->projekUzivatelManager = $projekUzivatelManager;
+        $this->redirect("Projekt:default");
     }
-
-    public function renderDefault()
-    {
-        $this->template->projekty = $this->projektManager->getProjektAll();
-        $this->template->uzivatele = $this->projekUzivatelManager->getUzivateleProjekt();
-    }
-
 }

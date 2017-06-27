@@ -20,32 +20,17 @@ class ProjekUzivatelManager
         $this->database = $database;
     }
 
-    public function getUzivateleProjekt($idProjektu = null)
+    public function getUzivateleProjekt($idProjektu)
     {
-        if($idProjektu) {
-            $uzivateleProjektu = $this->database->query("
-            SELECT p.id AS 'id_projektu', u.id AS 'id_uzivatele', jmeno, prijmeni
-            FROM projekt p
-            INNER JOIN projekt_uzivatel pu ON pu.fk_p = p.id
-            INNER JOIN uzivatel u ON u.id = pu.fk_u
-            WHERE p.id = $idProjektu
-          ")->fetchAll();
+        $projekt = $this->database->table('projekt')
+            ->get($idProjektu);
+
+        $uzivateleProjektu = [];
+
+        foreach ($projekt->related('projekt_uzivatel') as $projektUzivatel) {
+            $idUzivatele = $projektUzivatel->ref('uzivatel', 'fk_u')->id;
+            $uzivateleProjektu[$idUzivatele] = $idUzivatele;
         }
-
-        else {
-            $uzivateleProjektu = $this->database->query("
-            SELECT p.id AS 'id_projektu', u.id AS 'id_uzivatele', jmeno, prijmeni
-            FROM projekt p
-            INNER JOIN projekt_uzivatel pu ON pu.fk_p = p.id
-            INNER JOIN uzivatel u ON u.id = pu.fk_u
-          ")->fetchAll();
-            //$uzivateleProjektu = $this->database->table('projekt_uzivatel');
-        }
-
-        /*$vyber = $this->database->table('projekt_uzivatel')
-            ->where('uzivatel.id', 'projekt_uzivatel.fk_u');*/
-
-        //dump($selection->ref('uzivatel', 'fk_u')->jmeno);
 
         return $uzivateleProjektu;
     }

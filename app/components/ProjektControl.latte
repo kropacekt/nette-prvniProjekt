@@ -32,8 +32,8 @@
 
         <h3>Pracovníci</h3>
         <div class="form-group row">
-        {*staticka 20 neni idealni*}
-        {for $i = 1; $i <= 20; $i++}
+
+        {for $i = 1; $i <= $pocet_uzivatelu; $i++}
 
                 <div class="col-sm-1"> {label $i /} </div>
                 <div class=" col-sm-2"> {input $i} </div>
@@ -51,7 +51,7 @@
 
 <div class="container">
     {foreach $flashes as $flash}
-        <div class="flash alert alert-{$flash->type} col-sm-5 col-sm-offset-2" style="text-align: center;">
+        <div class="flash alert alert-{$flash->type} col-sm-8 col-sm-offset-2" style="text-align: center;">
             {$flash->message}
         </div>
     {/foreach}

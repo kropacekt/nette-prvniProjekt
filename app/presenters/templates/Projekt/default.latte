@@ -30,12 +30,9 @@
 				</td>
 
 				<td>
-					{foreach $uzivatele as $uzivatel}
-						{if $uzivatel->id_projektu == $projekt->id}
-							{*{$uzivatel->jmeno}*}
-							{$uzivatel->prijmeni}<br>
-						{/if}
-					{/foreach}
+                    {foreach $projekt->related('projekt_uzivatel') as $projektUzivatel}
+                        {$projektUzivatel->ref('uzivatel', 'fk_u')->prijmeni}<br>
+                    {/foreach}
 				</td>
 
 				<td><a n:href="Projekt:editovat $projekt->id" class="btn btn-default">Editovat</a></td>

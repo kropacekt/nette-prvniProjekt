@@ -27,6 +27,10 @@ class ProjektManager
             ->table('projekt')
             ->get($id);
 
+        if(!$p) {
+            return false;
+        }
+
         $projekt = $p->toArray();
         $projekt['datum_odevzdani'] = $projekt['datum_odevzdani']->format('Y-m-d');
 

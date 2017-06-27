@@ -33,11 +33,13 @@ class ProjektControl extends UI\Control
         $this->projektManager = $projektManager;
         $this->projekUzivatelManager = $projekUzivatelManager;
         $this->uzivatelManager = $uzivatelManager;
+        define("POCET_UZIVATELU", $this->uzivatelManager->getUzivatelAllCount());
     }
 
     public function render()
     {
         $this->template->id = $this->idProjektu;
+        $this->template->pocet_uzivatelu = POCET_UZIVATELU;
         $this->template->render(__DIR__ . '/ProjektControl.latte');
     }
 
@@ -75,16 +77,13 @@ class ProjektControl extends UI\Control
             $form->onSuccess[] = [$this, 'processPridatProjektForm'];
 
         } else { //editace
-            //uzivatele, kteri jsou prirazeni k projektu
+            //id uzivatelu, kteri jsou prirazeni k projektu
             $uzivateleProjektu = $this->projekUzivatelManager->getUzivateleProjekt($this->idProjektu);
 
-            //detaily editovaneho projektu, ke kterym se cyklem pripoji prirazeni uzivatele
+            //detaily editovaneho projektu
             $defaultValues = $this->projektManager->getProjekt($this->idProjektu);
 
-            foreach ($uzivateleProjektu as $uzivatel) {
-                $defaultValues[$uzivatel->id_uzivatele] = ($uzivatel->id_uzivatele);
-            }
-
+            $defaultValues = $defaultValues + $uzivateleProjektu;
             $form->setDefaults($defaultValues);
 
             $form->onSuccess[] = [$this, 'processEditovatProjektForm'];
@@ -96,18 +95,18 @@ class ProjektControl extends UI\Control
     public function getProjektValues($values)
     {
         return [
-            "nazev" => $values->offsetGet("nazev"),
-            "datum_odevzdani" => $values->offsetGet("datum_odevzdani"),
-            "typ" => $values->offsetGet("typ"),
-            "webovy_projekt" => $values->offsetGet("webovy_projekt")
+            "nazev" => $values->nazev,
+            "datum_odevzdani" => $values->datum_odevzdani,
+            "typ" => $values->typ,
+            "webovy_projekt" => $values->webovy_projekt
         ];
     }
 
     public function getUzivateleValues($values)
     {
         $uzivateleValues = [0=>NULL]; //id uzivatelu zacinaji od 1
-        for($i = 1; $i<= 20; $i++) {
-            $uzivateleValues[] = $values->offsetGet($i);
+        for($i = 1; $i <= POCET_UZIVATELU; $i++) {
+            $uzivateleValues[] = $values->$i;
         }
 
         //odstrani NULL hodnoty
@@ -141,6 +140,7 @@ class ProjektControl extends UI\Control
         $this->projekUzivatelManager->pracovniSila($this->idProjektu, $uzivateleValues);
 
         $this->flashMessage("Projekt byl úspěšně upraven.", 'info');
+        $this->redirect('this');
     }
 
 }

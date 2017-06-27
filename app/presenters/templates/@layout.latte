@@ -16,12 +16,11 @@
     <nav class="navbar navbar-default static-top">
         <div class="container">
             <ul class="nav navbar-nav">
-                <li><a n:href="Homepage:default">Přehled projektů</a></li>
+                <li><a n:href="Projekt:default">Přehled projektů</a></li>
                 <li><a n:href="Projekt:pridat">Přidat projekt</a></li>
             </ul>
         </div>
     </nav>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 
     <div class="container">
 	    {include content}

@@ -27,6 +27,12 @@ class ProjektPresenter extends UI\Presenter
         $this->projektManager = $projektManager;
     }
 
+    // vypis vsech projektu a jejich uzivatelu
+    public function actionDefault()
+    {
+        $this->template->projekty = $this->projektManager->getProjektAll();
+    }
+
     protected function createComponentProjekt()
     {
         $form = $this->projektControlFactory->create($this->idProjektu);
@@ -35,7 +41,11 @@ class ProjektPresenter extends UI\Presenter
 
     public function actionEditovat($id)
     {
-        $this->idProjektu=intval($id);
+        if($this->projektManager->getProjekt($id)) {
+            $this->idProjektu = intval($id);
+        } else {
+            $this->error("Projekt neexistuje!");
+        }
     }
 
     public function actionSmazat($id)
@@ -47,7 +57,7 @@ class ProjektPresenter extends UI\Presenter
             $this->flashMessage('Projekt, který byl zadán ke smazání, neexistuje nebo jsou k němu připojeni pracovníci.', 'danger');
         }
 
-        $this->redirect("Homepage:");
+        $this->redirect("Projekt:");
 
     }
 

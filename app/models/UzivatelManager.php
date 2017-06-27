@@ -20,6 +20,16 @@ class UzivatelManager
     }
 
     public function getUzivatelAll() {
-        return $this->database->table('uzivatel')->order('id');
+        return $this->database
+            ->table('uzivatel')
+            ->order('id');
+    }
+
+    public function getUzivatelAllCount() {
+        return intval($this->database
+            ->table('uzivatel')
+            ->order('id')
+            ->count()
+        );
     }
 }
